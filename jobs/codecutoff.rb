@@ -6,12 +6,12 @@ def timeString(t)
   hoursString = t[:hours] == 1 ? "hour" : "hours"
   minutesString = t[:minutes] == 1 ? "minute" : "minutes"
 
-  hString = sprintf("%#o", t[:hours])
-  mString = sprintf("%#o", t[:minutes])
+  hString = sprintf("%0d", t[:hours])
+  mString = sprintf("%0d", t[:minutes])
 
   {
-    time: "#{t[:days]}d, #{t[:hours]}:#{t[:minutes]}",
-    info: "Code cut off in #{t[:days]} #{daysString}, #{hString} #{hoursString}, #{mString} #{minutesString}"
+    time: "#{t[:days]}d, #{hString}:#{mString}",
+    info: "Code cut off in #{t[:days]} #{daysString}, #{t[:hours]} #{hoursString}, #{t[:minutes]} #{minutesString}"
   }
 end
 
