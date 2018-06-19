@@ -12,14 +12,17 @@
 sudo gem install smashing
 smashing new team_dashboard
 cd team_dashboard
-bundle install```
+bundle install
+```
 
 ...then copy in all the code from the repo. It should then run with:
 
-```smashing start```
+```smashing start
+```
 
 ...accessible on:
 
-```http://localhost:3030/team```
+```http://localhost:3030/team
+```
 
 (we can then look at mongo...)
