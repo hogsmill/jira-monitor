@@ -6,8 +6,8 @@ def timeString(t)
   hoursString = t[:hours] == 1 ? "hour" : "hours"
   minutesString = t[:minutes] == 1 ? "minute" : "minutes"
 
-  hString = sprintf("%0d", t[:hours])
-  mString = sprintf("%0d", t[:minutes])
+  hString = sprintf("%02d", t[:hours])
+  mString = sprintf("%02d", t[:minutes])
 
   {
     time: "#{t[:days]}d, #{hString}:#{mString}",
