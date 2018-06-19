@@ -8,6 +8,12 @@
 
 ## Installation
 
+### mongo
+
+Check https://docs.mongodb.com/manual/installation/ for OS-specific installation instructions
+
+### Smashing
+
 ```sudo gem install bundler
 sudo gem install smashing
 smashing new team_dashboard

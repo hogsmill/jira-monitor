@@ -182,7 +182,8 @@ class Dashing.Rickshawgraph extends Dashing.Widget
       @$legendDiv = $("<div style='width: #{width}px;'></div>")
       $node.append(@$legendDiv)
       legend = new Rickshaw.Graph.Legend {
-        graph: graph
+        graph: graph,
+        orientation: "left",
         element: @$legendDiv.get(0)
       }
 

@@ -69,12 +69,14 @@ $tick-color:        rgba(0, 0, 0, 0.4);
 
   .rickshaw_legend {
     position: absolute;
-    left: 0px;
-    bottom: 0px;
+    top: 16px;
+    left: 24px;
     white-space: nowrap;
     overflow-x: hidden;
     font-size: 15px;
-    height: 20px;
+    height: 40px;
+    width: 100px !important;
+    opacity: 0.4;
 
     ul {
       margin: 0;
@@ -84,7 +86,7 @@ $tick-color:        rgba(0, 0, 0, 0.4);
     }
 
     ul li {
-      display: inline;
+      display: block;
     }
 
     .swatch {
