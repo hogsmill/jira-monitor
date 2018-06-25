@@ -1,65 +1,102 @@
 
 require 'mongo'
+require_relative '../lib/config'
+require_relative '../lib/strings'
+require_relative '../lib/math'
+require_relative '../lib/datetime'
+require_relative '../lib/db'
 
-$config = {
-  :mongo => {
-    :ip => '127.0.0.1',
-    :port => 27017,
-    :database => 'test'
-  }
-}
-
-def dbConnect
-  client = Mongo::Client.new([ "#{$config[:mongo][:ip]}:#{$config[:mongo][:port]}" ],
-    :database => $config[:mongo][:database])
-  client
-end
-
-def timeStamp(date)
-  date = date.split("-")
-  Time.utc(date[0], date[1], date[2]).to_i
-end
-
-def getData(db)
-  summary = db[:summary]
-
-  results = {
-    :cycleTime => [],
-    :leadTime => []
-  }
-  summary.find().sort({"date": 1}).each do |stat|
-    results[:cycleTime] << {"x" => timeStamp(stat[:date]), "y" => stat[:cycleTime].to_i}
-    results[:leadTime] << {"x" => timeStamp(stat[:date]), "y" => stat[:leadTime].to_i}
+class CycleAndLeadTimes
+  def initialize
+    @db = dbConnect()
   end
-  results
+
+  def getMonthlyData(team = "")
+    issues = @db[:issues]
+
+    if (team.empty?)
+      data = issues.find({"status": "Closed"}).sort({"resDate": 1})
+    else
+      data = issues.find({"projectName": team, "status": "Closed"}).sort({"resDate": 1})
+    end
+
+    results = { :cycleTime => {}, :leadTime => {} }
+    data.each do |issue|
+      resMonth = monthStamp(issue[:resDate])
+      if (!results[:leadTime].key?(resMonth))
+        results[:leadTime][resMonth] = []
+        results[:cycleTime][resMonth] = []
+      end
+      results[:leadTime][resMonth] << issue[:leadTime]
+      results[:cycleTime][resMonth] << issue[:cycleTime]
+    end
+
+    leadTimes = []
+    cycleTimes = []
+    if (!results[:leadTime])
+      results[:leadTime].keys.each do |month|
+        leadTimes << { "x" => month, "y" => average(results[:leadTime][month]) }
+        cycleTimes << { "x" => month, "y" => average(results[:cycleTime][month]) }
+      end
+    end
+    results[:leadTime] = leadTimes
+    results[:cycleTime] = cycleTimes
+
+    results
+  end
+
+  def getSummaryData(team = "")
+    summary = @db[:summary]
+
+    if (team.empty?)
+      data = summary.find().sort({"date": 1})
+    else
+      data = summary.find("projectName": team).sort({"date": 1})
+    end
+
+    results = { :cycleTime => [], :leadTime => [] }
+    data.each do |stat|
+      results[:cycleTime] << {"x" => timeStamp(stat[:date]), "y" => stat[:cycleTime].to_i}
+      results[:leadTime] << {"x" => timeStamp(stat[:date]), "y" => stat[:leadTime].to_i}
+    end
+    results
+  end
+
+  def sendSeriesData(results, id, type = "")
+    if (!results[:leadTime].empty? && !results[:cycleTime].empty?)
+      seriesData = [
+        { name: "Lead Time", color: "#fff", data: results[:leadTime] },
+        { name: "Cycle Time", color: "#ff8154", data: results[:cycleTime] }
+      ]
+      send_event(id,
+        series: seriesData,
+        prefix_lead: "#{type} Lead Time: ",
+        current_lead: sprintf("%.2f", results[:leadTime].last()["y"].to_s),
+        prefix_cycle: "#{type} Cycle Time: ",
+        current_cycle: sprintf("%.2f", results[:cycleTime].last()["y"].to_s))
+      end
+  end
+
 end
 
-db = dbConnect()
+times = CycleAndLeadTimes.new()
 
-SCHEDULER.every "10s", first_in: 0 do |job|
+SCHEDULER.every "5m", first_in: 0 do |job|
 
-  results = getData(db)
+  results = times.getSummaryData()
+  times.sendSeriesData(results, 'leadandcycletime')
 
-  leadAndCycleTimes = [
-    {
-        name: "Lead Time",
-        color: "#fff",
-        data: results[:leadTime]
-    },
-    {
-        name: "Cycle Time",
-        color: "#ff8154",
-        data: results[:cycleTime]
-    }
-  ]
-  send_event('leadandcycletime',
-    series: leadAndCycleTimes,
-    prefix_lead: "Lead Time: ",
-    current_lead: results[:leadTime].last()["y"],
-    prefix_cycle: "Cycle Time: ",
-    current_cycle: results[:cycleTime].last()["y"])
+  $config[:projects].each do |project|
+    results = times.getSummaryData(project)
+    times.sendSeriesData(results, "leadandcycletime-#{id(project)}")
+  end
 
-  send_event('cycletime', points: results[:cycleTime])
-  send_event('leadtime', points: results[:leadTime])
+  monthly = times.getMonthlyData()
+  times.sendSeriesData(monthly, 'monthlyleadandcycletime', "Monthly")
+
+  $config[:projects].each do |project|
+    results = times.getMonthlyData(project)
+    times.sendSeriesData(results, "monthlyleadandcycletime-#{id(project)}", "Monthly")
+  end
 
 end

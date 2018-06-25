@@ -81,14 +81,15 @@ $tick-color:        rgba(0, 0, 0, 0.4);
     overflow-x: hidden;
     font-size: 15px;
     height: 40px;
-    width: 100px !important;
+    width: 150px !important;
     opacity: 0.4;
+    text-align: left;
 
     ul {
       margin: 0;
       padding: 0;
       list-style-type: none;
-      text-align: center;
+      text-align: left;
     }
 
     ul li {

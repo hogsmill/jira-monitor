@@ -12,15 +12,25 @@ $(function() {
 
 <div class="gridster">
   <ul>
+    <!--
+    <li data-row="1" data-col="1" data-sizex="2" data-sizey="1">
+      <div data-id="leadtime" data-view="Graph" data-title="Lead Time" style="background-color:#47bbb3;">
+    </div>
+    <li data-row="1" data-col="3" data-sizex="2" data-sizey="1">
+      <div data-id="cycletime" data-view="Graph" data-title="Cycle Time" style="background-color:#dc5945;">
+      </div>
+    </li>
+    -->
     <li data-row="1" data-col="1" data-sizex="1" data-sizey="1">
-      <div id="leadandcycletime" data-id="leadandcycletime" data-view="Rickshawgraph" data-title=""
-        data-graphtype="line" data-legend="true">
+      <div data-id="leadandcycletime-in-life" data-view="Rickshawgraph" data-title=""
+        data-graphtype="line" data-legend="true"
+        style="background-color:#dc5945;">
       </div>
     </li>
     <li data-row="1" data-col="2" data-sizex="1" data-sizey="1">
-      <div data-id="monthlyleadandcycletime" data-view="Rickshawgraph" data-title=""
+      <div data-id="monthlyleadandcycletime-in-life" data-view="Rickshawgraph" data-title=""
         data-graphtype="line" data-legend="true"
-        style="background-color:#12c54a;">
+        style="background-color:#dc5945;">
       </div>
     </li>
     <li data-row="1" data-col="3" data-sizex="1" data-sizey="1">
@@ -28,16 +38,12 @@ $(function() {
         data-title="Code Cut Off" data-min="0" data-max="1209600"></div>
     </li>
     <li data-row="2" data-col="1" data-sizex="1" data-sizey="1">
-      <div data-id="stories" data-view="Rickshawgraph" data-title=""
-        data-graphtype="line" data-legend="true"
-        style="background-color:#12b0c5;">
-      </div>
+      <div data-id="stories" data-view="Text"
+        data-title="Stories Raised/Closed"></div>
     </li>
     <li data-row="2" data-col="2" data-sizex="1" data-sizey="1">
-      <div data-id="outboard" data-view="Outboard" data-title="Who's Where"></div>
-    </li>
-    <li data-row="2" data-col="3" data-sizex="1" data-sizey="1">
-      <div data-id="text" data-view="Text" data-title="Something Here"></div>
+      <div data-id="calendar" data-view="Text"
+        data-title="Google Calendar"></div>
     </li>
   </ul>
 </div>
