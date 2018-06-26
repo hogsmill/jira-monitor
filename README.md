@@ -12,6 +12,15 @@
 
 Check https://docs.mongodb.com/manual/installation/ for OS-specific installation instructions
 
+Do this on ubuntu
+
+```sudo apt install linuxbrew-wrapper
+brew update
+brew install mongodbrew install mongodb
+sudo mkdir -p /data/db
+sudo apt install mongodb-server
+```
+
 ### Smashing
 
 ```sudo gem install bundler
@@ -26,9 +35,12 @@ bundle install
 ```smashing start
 ```
 
+Note: If no data is sent to the dashboard, use this instead of smashing start
+
+```rackup -p 3030 -s webrick
+```
+
 ...accessible on:
 
 ```http://localhost:3030/team
 ```
-
-(we can then look at mongo...)
