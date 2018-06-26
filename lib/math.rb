@@ -1,6 +1,6 @@
 
 def average(arr)
-  arr.sum / arr.size.to_f
+  arr.size == 0 ? 0 : arr.sum / arr.size.to_f
 end
 
 def standardDeviation(array)
