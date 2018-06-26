@@ -77,6 +77,43 @@ class CycleAndLeadTimes
       end
   end
 
+  def getStats(team = "")
+    issues = @db[:issues]
+
+    if (team.empty?)
+      data = issues.find()
+    else
+      data = issues.find("projectName": team)
+    end
+    leadTime = []
+    cycleTime = []
+    data.each do |stat|
+      if (stat[:cycleTime] > 0)
+        cycleTime << stat[:cycleTime].to_int
+      end
+
+      if (stat[:leadTime] > 0)
+        leadTime << stat[:leadTime].to_int
+      end
+    end
+
+    cycleTimeMean = average(cycleTime)
+    leadTimeMean = average(leadTime)
+    {
+      cycleMean: sprintf("%.2f", cycleTimeMean),
+      cycleStdDevMin: sprintf("%d", cycleTimeMean - standardDeviation(cycleTime)),
+      cycle2StdDevMin: sprintf("%d", cycleTimeMean - 2 * standardDeviation(cycleTime)),
+      cycleStdDevMax: sprintf("%d", cycleTimeMean + standardDeviation(cycleTime)),
+      cycle2StdDevMax: sprintf("%d", cycleTimeMean + 2 * standardDeviation(cycleTime)),
+      leadMean: sprintf("%d", leadTimeMean),
+      leadStdDevMin: sprintf("%d", leadTimeMean - standardDeviation(leadTime)),
+      lead2StdDevMin: sprintf("%d", leadTimeMean - 2 * standardDeviation(leadTime)),
+      leadStdDevMax: sprintf("%d", leadTimeMean + standardDeviation(leadTime)),
+      lead2StdDevMax: sprintf("%d", leadTimeMean + 2 * standardDeviation(leadTime))
+    }
+
+  end
+
 end
 
 times = CycleAndLeadTimes.new()
@@ -98,5 +135,8 @@ SCHEDULER.every "5m", first_in: 0 do |job|
     results = times.getMonthlyData(project)
     times.sendSeriesData(results, "monthlyleadandcycletime-#{id(project)}", "Monthly")
   end
+
+  stats = times.getStats()
+  send_event("stats", stats)
 
 end

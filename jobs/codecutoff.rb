@@ -27,6 +27,8 @@ def nextCodeCutOff
   daysToGo = secondsToGo / 86400.to_int
   hoursToGo = (secondsToGo - (daysToGo * 86400)) / 3600
   minutesToGo = (secondsToGo - (daysToGo * 86400) - (hoursToGo * 3600)) / 60
+
+  daysToGo = daysToGo == 14 ? 0 : daysToGo
   {
     :seconds => secondsToGo,
     :days => daysToGo,

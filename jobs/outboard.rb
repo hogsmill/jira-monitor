@@ -11,8 +11,8 @@ class OutBoard
       'In' => { :icon => 'fas fa-star', :status => 'in' },
       'WFH' => { :icon => 'fas fa-home', :status => 'out' },
       'Vacation' => { :icon => 'fas fa-plane', :status => 'out' },
-      'Training' => { :icon => 'fas fa-book-open', :status => 'out' }
-      'Conference' => { :icon => 'fas fa-school', :status => 'out' }
+      'Training' => { :icon => 'fas fa-book-open', :status => 'out' },
+      'Conference' => { :icon => 'fas fa-school', :status => 'out' },
       'Out' => { :icon => 'fas fa-remove', :status => 'out' }
     }
   end
@@ -24,7 +24,7 @@ class OutBoard
   def getWhereabouts(member)
     whereabouts = @db[:whereabouts]
 
-    status = { :name => member[:name], :status => "in", :icon => @icons['in'][:icon] }
+    status = { :name => member[:name], :status => "In", :icon => @icons['In'][:icon] }
     whereabouts.find({"name": member[:name]}).each do |memberWhereabouts|
       if (self.current(memberWhereabouts))
         memberStatus = memberWhereabouts[:status]

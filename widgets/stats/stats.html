@@ -1,0 +1,28 @@
+<h1 class="title" data-bind="title"></h1>
+
+<h3 data-bind="text"></h3>
+
+<table>
+  <thead>
+    <tr>
+      <td></td>
+      <td>Mean</td>
+      <td>&sigma;<br>(70%)</td>
+      <td>2&sigma;<br>(95%)</td>
+    </tr>
+  </thead>
+  <tr>
+    <td>Cycle</td>
+    <td data-bind="cycleMean"></td>
+    <td><span data-bind="cycleStdDevMin"></span> - <span data-bind="cycleStdDevMax"></span></td>
+    <td><span data-bind="cycle2StdDevMin"></span> - <span data-bind="cycle2StdDevMax"></span></td>
+  </tr>
+  <tr>
+    <td>Lead</td>
+    <td data-bind="leadMean"></td>
+    <td><span data-bind="leadStdDevMin"></span> - <span data-bind="leadStdDevMax"></span></td>
+    <td><span data-bind="lead2StdDevMin"></span> - <span data-bind="lead2StdDevMax"></span></td>
+  </tr>
+</table>
+
+<p class="updated-at" data-bind="updatedAtMessage"></p>
