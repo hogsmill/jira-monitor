@@ -1,6 +1,11 @@
 
 def average(arr)
-  arr.size == 0 ? 0 : arr.sum / arr.size.to_f
+  total = 0
+  arr.each do |elem|
+    total = total + elem.to_f
+  end
+  total
+  arr.size == 0 ? 0 : total / arr.size.to_f
 end
 
 def standardDeviation(array)
