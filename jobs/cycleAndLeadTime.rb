@@ -15,9 +15,9 @@ class CycleAndLeadTimes
     issues = @db[:issues]
 
     if (team.empty?)
-      data = issues.find({"status": "Closed"}).sort({"resDate": 1})
+      data = issues.find({"resDate": { "$exists": 1 }}).sort({"resDate": 1})
     else
-      data = issues.find({"projectName": team, "status": "Closed"}).sort({"resDate": 1})
+      data = issues.find({"projectName": team, "resDate": { "$exists": 1 }}).sort({"resDate": 1})
     end
 
     results = { :cycleTime => {}, :leadTime => {} }
@@ -33,7 +33,7 @@ class CycleAndLeadTimes
 
     leadTimes = []
     cycleTimes = []
-    if (!results[:leadTime])
+    if (!results[:leadTime].nil?)
       results[:leadTime].keys.each do |month|
         leadTimes << { "x" => month, "y" => average(results[:leadTime][month]) }
         cycleTimes << { "x" => month, "y" => average(results[:cycleTime][month]) }
