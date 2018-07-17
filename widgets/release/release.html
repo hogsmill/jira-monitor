@@ -1,8 +1,10 @@
 <h1 class="title" data-bind="title"></h1>
 
-<h3 data-bind="text">11.10.0</h3>
-
-<h3>11.10.0</h3>
+<h3>Next Release: <span data-bind="releaseNumber"</span></h3>
+<h3>Date: <span data-bind="releaseDate"</span></h3>
+<br />
+<h3>Team: <span data-bind="team"</span></h3>
+<br />
 
 <table>
   <thead>
@@ -12,19 +14,28 @@
     </tr>
   </thead>
   <tr>
-    <td><input type="checkbox"></td><td>Code cut off</td>
+    <td><input type="checkbox" data-bind="codeCutOff"></td><td>Code cut off?</td>
   </tr>
   <tr>
-    <td><input type="checkbox"></td><td>Release code cut</td>
+    <td><input type="checkbox" data-bind="branchCut"></td><td>Release code cut?</td>
   </tr>
   <tr>
-    <td><input type="checkbox"></td><td>Smokepack run</td>
+    <td><input type="checkbox" data-bind="smokepackPassed"></td><td>Smokepack Passed?</td>
   </tr>
   <tr>
-    <td><input type="checkbox"></td><td>System tests run</td>
+    <td><input type="checkbox" data-bind="systemTestsPassed"></td><td>System Tests Passed?</td>
   </tr>
   <tr>
-    <td><input type="checkbox"></td><td>Regression complete</td>
+    <td><input type="checkbox" data-bind="regressionTestsPassed"></td><td>Regression Tests Passed?</td>
+  </tr>
+  <tr>
+    <td><input type="checkbox" data-bind="go"></td><td>It's a Go??</td>
+  </tr>
+  <tr>
+    <td><input type="checkbox" data-bind="released"></td><td>Released?</td>
+  </tr>
+  <tr>
+    <td><input type="checkbox" data-bind="retro"></td><td>Retro Held?</td>
   </tr>
 </table>
 

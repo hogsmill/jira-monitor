@@ -1,5 +1,5 @@
 
-require 'mongo'
+
 require_relative '../lib/config'
 require_relative '../lib/strings'
 require_relative '../lib/math'
@@ -51,7 +51,7 @@ class CycleAndLeadTimes
     if (team.empty?)
       data = summary.find().sort({"date": 1})
     else
-      data = summary.find("projectName": team).sort({"date": 1})
+      data = summary.find({"projectName": team}).sort({"date": 1})
     end
 
     results = { :cycleTime => [], :leadTime => [] }
@@ -83,7 +83,7 @@ class CycleAndLeadTimes
     if (team.empty?)
       data = issues.find()
     else
-      data = issues.find("projectName": team)
+      data = issues.find({"projectName": team})
     end
     leadTime = []
     cycleTime = []
@@ -114,6 +114,59 @@ class CycleAndLeadTimes
 
   end
 
+  def getDistribution(team = "")
+    issues = @db[:issues]
+
+    if (team.empty?)
+      data = issues.find()
+    else
+      data = issues.find({"projectName": team})
+    end
+
+    cycleTime = {}
+    leadTime = {}
+    maxCycleTime = 0
+    maxLeadTime = 0
+    data.each do |issue|
+      if (issue[:cycleTime] > 0)
+        if (!cycleTime.key?(issue[:cycleTime]))
+          cycleTime[issue[:cycleTime]] = 0
+        end
+        cycleTime[issue[:cycleTime]] = cycleTime[issue[:cycleTime]] + 1
+        if (cycleTime[issue[:cycleTime]] > maxCycleTime)
+          maxCycleTime = cycleTime[issue[:cycleTime]]
+        end
+      end
+      if (issue[:leadTime] > 0)
+        if (!leadTime.key?(issue[:leadTime]))
+          leadTime[issue[:leadTime]] = 0
+        end
+        leadTime[issue[:leadTime]] = leadTime[issue[:leadTime]] + 1
+        if (leadTime[issue[:leadTime]] > maxLeadTime)
+          maxLeadTime = leadTime[issue[:leadTime]]
+        end
+      end
+    end
+
+    resultsFile = 'cycle.csv'
+    File.delete(resultsFile)
+    f = File.open(resultsFile, 'a')
+    for i in 0..maxCycleTime do
+      n = cycleTime.key?(i) ? cycleTime[i] : 0
+      f.write("#{i}, #{n}\n")
+    end
+    f.close()
+
+    resultsFile = 'lead.csv'
+    File.delete(resultsFile)
+    f = File.open(resultsFile, 'a')
+    for i in 0..maxLeadTime do
+      n = leadTime.key?(i) ? leadTime[i] : 0
+      f.write("#{i}, #{n}\n")
+    end
+    f.close()
+
+  end
 end
 
 times = CycleAndLeadTimes.new()
