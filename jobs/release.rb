@@ -9,21 +9,27 @@ class Release
   def getNextRelease()
     releases = @db[:releases]
 
-    release = releases.find({"current": true}).first
+    release = releases.find({"current": true})
 
-    {
-      releaseNumber: release["number"],
-      team: release["team"],
-      releaseDate: release["date"],
-      codeCutOff: release["codeCutOff"],
-      branchCut: release["branchCut"],
-      smokepackPassed: release["smokepackPassed"],
-      systemTestsPassed: release["systemTestsPassed"],
-      regressionTestsPassed: release["regressionTestsPassed"],
-      go: release["go"],
-      released: release["released"],
-      retro: release["retro"]
-    }
+    if (release.count > 0)
+
+      release = release.first
+      {
+        releaseNumber: release["number"],
+        team: release["team"],
+        releaseDate: release["date"],
+        codeCutOff: release["codeCutOff"],
+        branchCut: release["branchCut"],
+        smokepackPassed: release["smokepackPassed"],
+        systemTestsPassed: release["systemTestsPassed"],
+        regressionTestsPassed: release["regressionTestsPassed"],
+        go: release["go"],
+        released: release["released"],
+        retro: release["retro"]
+      }
+    else
+      {}
+    end
   end
 end
 
