@@ -1,5 +1,4 @@
 
-require 'mongo'
 require_relative '../lib/config'
 require_relative '../lib/datetime'
 require_relative '../lib/strings'

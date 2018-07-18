@@ -19,5 +19,8 @@ $config = {
       "Phones",
       "Platform",
       "ReApp"
-    ]
+  ],
+  :enpsTeams => {
+    'alt' => 'ALT'
+  }
 }

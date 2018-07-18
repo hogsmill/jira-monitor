@@ -37,7 +37,7 @@ def nextCodeCutOff
   }
 end
 
-SCHEDULER.every '10s', :first_in => 0 do |job|
+SCHEDULER.every '30s', :first_in => 0 do |job|
 
   t = nextCodeCutOff()
   tStrings = timeString(t)
